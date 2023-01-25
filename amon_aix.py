@@ -1,4 +1,4 @@
-#%matplotlib inline
+
 import pandas as pd
 import re
 import datetime
@@ -9,16 +9,10 @@ import sys,os
 import numpy as np
 import seaborn as sns
 sns.set_style("whitegrid")
-#nmondf = pd.read_csv("burnley_23052022.nmon")
-#nmondf.head()
-#print("abh")
 
 
-#file1 = open('mplaix0285_220506.nmon', 'r')
-#file1 = open('dunholme_11032022.nmon', 'r')
 
-#file1 = open('burnley_23052022.nmon', 'r')
-#file1 = open('port1026ovl_31032022.nmon', 'r')
+
 
 
 if os.getcwd() not in sys.path : 
@@ -451,9 +445,6 @@ def abhi_parser_module(csv_filename,starting_text):
 #######################################################################################################################
 
 
-#file1 = open('mplaix0285_220506.nmon', 'r')
-#file1 = open('burnley_23052022.nmon', 'r')
-#file1 = open('port1026ovl_31032022.nmon', 'r')
 
 
 Lines = file1.readlines()
