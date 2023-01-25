@@ -431,13 +431,13 @@ def abhi_parser_module(csv_filename,starting_text):
     global custom_delimiter
     global Lines
     
-    tempfile = open(f"{csv_temp_dir}\{csv_filename}", 'w')
+    tempfile = open(f"{csv_temp_dir}/{csv_filename}", 'w')
     for thisline in Lines:
         if thisline.startswith(starting_text): #CPU_ALL LPAR
         #print(thisline.strip())
             tempfile.writelines(thisline)
     tempfile.close()
-    df = pd.read_csv(f"{csv_temp_dir}\{csv_filename}",skiprows=0,sep = custom_delimiter)
+    df = pd.read_csv(f"{csv_temp_dir}/{csv_filename}",skiprows=0,sep = custom_delimiter)
     old_colname= str(df.columns[1])
     df.rename(columns = {old_colname:'TXXX'}, inplace = True) # this is for creating a common fieldname before merging 2 csv
     df = pd.merge(df, zzzzdf, on="TXXX")
