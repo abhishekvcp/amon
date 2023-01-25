@@ -24,7 +24,7 @@
 
 </h5>
 
-python module for .nmon file visualization. Run the script amon_aix.py Supply input filewait for 2 mins
+python parser for aIX .nmon file visualization. <br>Run the script amon_aix.py <br>Supply input filewait for 2 mins
 ![how_to_run](https://user-images.githubusercontent.com/46884901/214522544-69a0c4b3-b588-40e4-9ab2-1cebd2e61f84.JPG)
 
 Contact : abhishek.vcp@gmail.com
