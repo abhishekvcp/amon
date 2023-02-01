@@ -1,13 +1,14 @@
 # amon
-<h2>
-<p>This python script produces a pdf file reading through a .nmon file for AIX servers>/p>
+<h3>
+<p>This python script produces a pdf file reading through a .nmon file for AIX servers></p>
 
-![image](https://user-images.githubusercontent.com/46884901/216033364-0716d801-d039-4de4-9bb3-7e13cd7080e6.png)
-![image](https://user-images.githubusercontent.com/46884901/216033486-268951eb-0456-493a-ba09-4ae176673b3a.png)
-![image](https://user-images.githubusercontent.com/46884901/216033570-45b24520-f91b-4e89-8022-47e0d0e562e3.png)
-![image](https://user-images.githubusercontent.com/46884901/216033642-26b9a678-ba48-4a0e-840c-7a47670a3ecf.png)
-
-</h2>
+![image](https://user-images.githubusercontent.com/46884901/216034351-f2fb2415-be38-4816-9adc-42bf6f9448e7.png)
+![image](https://user-images.githubusercontent.com/46884901/216034503-cd208744-0792-4576-8879-49b558c7c2c5.png)
+![image](https://user-images.githubusercontent.com/46884901/216034589-37dd14f5-ae54-4575-805e-3e7463d04c5d.png)
+![image](https://user-images.githubusercontent.com/46884901/216034648-444c01b3-8052-4a96-9a10-a21a43eaacaa.png)
+![image](https://user-images.githubusercontent.com/46884901/216034699-a73fca41-64f3-4fd6-b499-639498369655.png)
+![image](https://user-images.githubusercontent.com/46884901/216034761-e833f85b-d1e7-4f19-aac4-d5106f2e5f36.png)
+</h3>
 <h4>
 <ol>Produces a pdf output file file</ol>
 <ol>Produces top CPU and Memory consuming commands / process </ol>
@@ -42,7 +43,20 @@ Method 2 : Run via automation : passing nmon file as a parameter
 
 ![image](https://user-images.githubusercontent.com/46884901/216031669-388d0647-e617-4587-8420-d4f9120b37dd.png)
 
-
+<br>
+-----------------------------------------SETUP VENV steps-----------------------------------------------------------------
+<br>
+python3 -m venv amon
+<br>
+cd amon
+<br>
+source bin/activate [linux]
+<br>
+Scripts/activate[Windows]
+<br>
+pip install -r amon_requirements.txt
+<br>
+-----------------------------------------SETUP VENV-----------------------------------------------------------------
 
 Contact : abhishek.vcp@gmail.com
 mob : 9740722880
