@@ -1,4 +1,4 @@
-
+#%matplotlib inline
 import pandas as pd
 import re
 import datetime
@@ -12,25 +12,16 @@ sns.set_style("whitegrid")
 
 
 
-
-
-
 if os.getcwd() not in sys.path : 
     sys.path.append(os.getcwd())
 
-filename = input("\n\n\t\t Owner : Abhishek Panakkaran\n\t\t abhi_nmon2pdf:[nmon file name] : ")
-file1 = open(filename, 'r')
-
-day_str = str(datetime.date.today()) # always use date from datetime class 
 
 legends = '.kehsihba'
 marker = '@pcv'  
 ticks_factor =' : kcabdeef'
 facecolors = 'moc.gmail'
 
-day_str = str(pd.datetime.now().date())
-pdf_filename = day_str + '_abhi_nmon2pdf_report.pdf'
-pdf_filename = filename + '.pdf'
+
 #pp = PdfPages(pdf_filename)
 
 #######################################################################################################################
@@ -101,14 +92,6 @@ def abhi_top_cpu_command_grapher():
 
     figa , ax2 = plt.subplots(figsize=(12,6))
     
-    #sns.lineplot(data=datatemp1, x="TDATATIME1", y="total_cpu", ax=ax1)
-    #ax1.axhline(y = virtualprocessors_x100 , color = 'b', linestyle = ':', label = "Total Number of VCPU / CPU * 100")
-    #ax1.axhline(y = (virtualprocessors_x100 * 80) / 100 , color = 'r', linestyle = '--', label = "80% threshold")
-    #ax1.set_title(title_servername + " Virtual processor consumption in percentage")
-    #ax1.set_yticks(range(0,virtualprocessors_x100 + 1,100))
-    #ax1.set_xlabel("datetime->")
-    #ax1.set_xticklabels(ax1.get_xticklabels(),rotation = 45)
-    #ax1.legend()
 
     sns.lineplot(data=datatemp2, x="TDATATIME1", y="total_cpu",hue="Command", ax=ax2)
     ax2.axhline(y = virtualprocessors_x100 , color = 'b', linestyle = ':', label = "Total Number of VCPU / CPU * 100")
@@ -116,8 +99,6 @@ def abhi_top_cpu_command_grapher():
     ax2.set_title(title_servername + " Top commands consuming CPU")
     ax2.set_yticks(range(0,virtualprocessors_x100 + 1,100))
     ax2.set_xlabel("datetime->")
-    #ax2.set_xticklabels(ax2.get_xticklabels(),rotation = 45)
-    #ax2.set_xlabel("hello")
     ax2.legend()
     
     figa.tight_layout() # tight_layout prevent overlapping of x labels between 2 figures
@@ -291,7 +272,7 @@ def abhi_top_memory_command_grapher():
     ax1.set_xticklabels(ax1.get_xticklabels(),rotation=80)
     ax1.set_title(title_servername + " Top 10 PID with highest Memory consumption in MB")
     ax1.set_xlabel("datetime->")
-    ax1.legend()
+    #ax1.legend() #abhi
     
 #count of pid by group by commands
     datatemp4 = topdf.groupby(by=["Command"]).agg(number_of_commands=("PID","count")).reset_index().sort_values(by="number_of_commands",ascending=False)
@@ -301,7 +282,7 @@ def abhi_top_memory_command_grapher():
     ax2.set_title(title_servername + " : Number of process by commands")
     ax2.set_xticklabels(ax2.get_xticklabels(),rotation=85)
     ax2.set_xlabel("datetime->")
-    ax2.legend()
+    #ax2.legend() #abhi
 
     figb.tight_layout()
     figb.text(0.95, 0.05,   legends [::-1] + marker[::-1] + facecolors[::-1],
@@ -425,13 +406,13 @@ def abhi_parser_module(csv_filename,starting_text):
     global custom_delimiter
     global Lines
     
-    tempfile = open(f"{csv_temp_dir}/{csv_filename}", 'w')
+    tempfile = open(f"{csv_temp_dir}\{csv_filename}", 'w')
     for thisline in Lines:
         if thisline.startswith(starting_text): #CPU_ALL LPAR
         #print(thisline.strip())
             tempfile.writelines(thisline)
     tempfile.close()
-    df = pd.read_csv(f"{csv_temp_dir}/{csv_filename}",skiprows=0,sep = custom_delimiter)
+    df = pd.read_csv(f"{csv_temp_dir}\{csv_filename}",skiprows=0,sep = custom_delimiter)
     old_colname= str(df.columns[1])
     df.rename(columns = {old_colname:'TXXX'}, inplace = True) # this is for creating a common fieldname before merging 2 csv
     df = pd.merge(df, zzzzdf, on="TXXX")
@@ -445,141 +426,165 @@ def abhi_parser_module(csv_filename,starting_text):
 #######################################################################################################################
 
 
+#file1 = open('mplaix0285_220506.nmon', 'r')
+#file1 = open('burnley_23052022.nmon', 'r')
+#file1 = open('port1026ovl_31032022.nmon', 'r')
+
+if __name__ == "__main__":
 
 
-Lines = file1.readlines()
-csv_temp_dir = "csv_temp_dir"
-os.makedirs(csv_temp_dir, exist_ok = True) # create a new directory
+    if len(sys.argv) == 1: # no arguments supplied with the script 
+        filename = input("\n\n\t\t Owner : Abhishek Panakkaran\n\t\t abhi_nmon2pdf:[nmon file name] : ")
+        #file1 = open(filename, 'r')
+    else:
+        filename = sys.argv[1]
+        
+        
+    file1 = open(filename, "r") # open the file name passed as argument
+    #day_str = str(datetime.date.today()) # always use date from datetime class
+   
 
-print("##" * 100,"\n BBBL - AIX configuration\n")
+    Lines = file1.readlines() 
+    csv_temp_dir = "csv_temp_dir"
+    os.makedirs(csv_temp_dir, exist_ok = True) # create a new directory
 
-bbblfile = open(f'{csv_temp_dir}/configuration-bbbl.csv', 'w')
-for thisline in Lines:
-    if thisline.startswith("BBBL"):
-        #print(thisline.strip())
-        bbblfile.writelines(thisline)
-custom_delimiter = thisline[4] # linux has delimoter ";" aix has "," so we need to pick from the file
-bbblfile.close()
-bbbldf = pd.read_csv(f'{csv_temp_dir}/configuration-bbbl.csv',names=["BBBL","NBR","metric","conf"])
-bbbldf.set_index("metric",inplace=True)
-print(bbbldf.info())
-#print(bbbldf)
+    print("##" * 100,"\n BBBL - AIX configuration\n")
 
-configuration_dict = {
-
-'servername' : bbbldf.loc['lparname','conf'],
-'cpu_frame_total' : int(bbbldf.loc['CPU in sys','conf']),
-'cpu_frame_total' : int(bbbldf.loc['CPU in sys','conf']),
-'cpu_pool_total' : int(bbbldf.loc['Pool CPU','conf']),
-'cpu_virtual' : int(bbbldf.loc['Virtual CPU','conf']),
-'cpu_entitlement' : float(bbbldf.loc['Entitled Capacity','conf']),
-'memory_installedGB' : int(int(bbbldf.loc['online Memory','conf']) / 1024 )
-                        }
-confdf = pd.DataFrame(configuration_dict,index=["conf"])
-print(confdf.info())
-print(confdf)
-
-title_servername = confdf.loc["conf","servername"]
-pp = PdfPages(title_servername + pdf_filename)
+    bbblfile = open(f'{csv_temp_dir}/configuration-bbbl.csv', 'w') # create a new file
+    for thisline in Lines:
+        if thisline.startswith("BBBL") or thisline.startswith("AAA,date"): # AAA,date is extracted to get the date with in nmon file. later supply as filename
+            #print(thisline.strip())
+            bbblfile.writelines(thisline)
+    custom_delimiter = thisline[4] # linux has delimoter ";" aix has "," so we need to pick from the file
+    bbblfile.close()
+    bbbldf = pd.read_csv(f'{csv_temp_dir}/configuration-bbbl.csv',names=["BBBL","NBR","metric","conf"])
 
 
+    nmon_date = bbbldf.iloc[0].tolist()[2] # nmon date is found as the 0th record 3rd field 
+   
+    dd , mon , yyyy = nmon_date.split("-") # year come in the end, move yyyy to the beginning and day to end : parrt1
+    nmon_date = (f"{yyyy}-{mon}-{dd}") # year come in the end, move yyyy to the beginning and day to end : part2
+    print(nmon_date)
+    #a = input("press any key")
+    bbbldf.set_index("metric",inplace=True)
+    print(bbbldf.info())
+    #print(bbbldf)
 
-print("##" * 100,"\nZZZZ - Time\n")
+    configuration_dict = {
 
-zzzzfile = open(f'{csv_temp_dir}/zzzz.csv', 'w')
-for thisline in Lines:
-    if thisline.startswith("ZZZZ"):
-        #print(thisline.strip())
-        zzzzfile.writelines(thisline)
-custom_delimiter = thisline[4] # linux has delimoter ";" aix has "," so we need to pick from the file
-custom_delimiter =","
-zzzzfile.close()
-zzzzdf = pd.read_csv(f"{csv_temp_dir}/zzzz.csv",skiprows=0,names=["ZZZZ","TXXX","TTIME","TDATE"],sep = custom_delimiter)
-zzzzdf["TDATATIME"] = zzzzdf["TDATE"] + " " + zzzzdf["TTIME"]
-zzzzdf["TDATATIME"] = zzzzdf["TDATATIME"].apply(abhi_convert_to_date)
-print(zzzzdf.info())
-#print(zzzzdf.head())
-
-
-print("##" * 100,"\nTopdf\n")
-
-# read the file which starts with "TOP" . slip the first line
-
-topfile = open(f'{csv_temp_dir}/top.csv', 'w')
-for thisline in Lines:
-    if thisline.startswith("TOP"):
-        #print(thisline.strip())
-        topfile.writelines(thisline)
-topfile.close()
-topdf = pd.read_csv(f"{csv_temp_dir}/top.csv",skiprows=1,sep = custom_delimiter)
-#old_colname= str(topdf.columns[1])
-topdf.rename(columns = {"Time":'TXXX'}, inplace = True)
-topdf.rename(columns = {"+PID":'PID'}, inplace = True)
-topdf = pd.merge(topdf, zzzzdf, on="TXXX")
-#topdf.set_index("TDATATIME",inplace=True)
-topdf.index = topdf["TDATATIME"]
-topdf.rename(columns = {"TDATATIME":'TDATATIME1'}, inplace = True)
-print(topdf.info())
-topdf.to_csv(f"{csv_temp_dir}/topfinal.csv")
-topdf.head()
-
-
-print("##" * 100)
-
-lpardf = abhi_parser_module("lpar.csv","LPAR")
-cpualldf = abhi_parser_module("cpuall.csv","CPU_ALL")
-memnewdf = abhi_parser_module("memnew.csv","MEMNEW")
-pagedf = abhi_parser_module("page.csv","PAGE")
+    'servername' : bbbldf.loc['lparname','conf'],
+    'cpu_frame_total' : int(bbbldf.loc['CPU in sys','conf']),
+    'cpu_pool_total' : int(bbbldf.loc['Pool CPU','conf']),
+    'cpu_virtual' : int(bbbldf.loc['Virtual CPU','conf']),
+    'cpu_entitlement' : float(bbbldf.loc['Entitled Capacity','conf']),
+    'memory_installedGB' : int(int(bbbldf.loc['online Memory','conf']) / 1024 )
+                            }
+    confdf = pd.DataFrame(configuration_dict,index=["conf"])
+    print(confdf.info())
+    print(confdf)
+   
+    title_servername = confdf.loc["conf","servername"]
+    pdf_filename = (nmon_date + "_" + title_servername+"_"+ filename + '.pdf')
+    pp = PdfPages(nmon_date + "_" + title_servername+"_"+ filename + '.pdf')
 
 
 
-diskxferdf = abhi_parser_module("diskxfer.csv","DISKXFER")
-diskbusydf = abhi_parser_module("diskbusy.csv","DISKBUSY")
+    print("##" * 100,"\nZZZZ - Time\n")
+
+    zzzzfile = open(f'{csv_temp_dir}/zzzz.csv', 'w')
+    for thisline in Lines:
+        if thisline.startswith("ZZZZ"):
+            #print(thisline.strip())
+            zzzzfile.writelines(thisline)
+    custom_delimiter = thisline[4] # linux has delimoter ";" aix has "," so we need to pick from the file
+    custom_delimiter =","
+    zzzzfile.close()
+    zzzzdf = pd.read_csv(f"{csv_temp_dir}/zzzz.csv",skiprows=0,names=["ZZZZ","TXXX","TTIME","TDATE"],sep = custom_delimiter)
+    zzzzdf["TDATATIME"] = zzzzdf["TDATE"] + " " + zzzzdf["TTIME"]
+    zzzzdf["TDATATIME"] = zzzzdf["TDATATIME"].apply(abhi_convert_to_date)
+    print(zzzzdf.info())
+    #print(zzzzdf.head())
 
 
-'''
-Diskwerite and Diskread also has Diskwritesrvc and diskreadsrvc parsed from the nmon file
-So after parsing we need to filter out only Diskwrite
-diskwritedf also has a problem all columns are parsed as object. 
-We need to exclude columns not stating with "hd*" before chnverting entire dataframe as float / numeris
+    print("##" * 100,"\nTopdf\n")
 
-'''
-diskwritedf = abhi_parser_module("diskwrite.csv","DISKWRITE")
-diskwritedf = diskwritedf[diskwritedf['DISKWRITE'] == 'DISKWRITE']
-diskwritedf = diskwritedf.loc[:,diskwritedf.columns.str.startswith('hdisk')]
-diskwritedf = diskwritedf.apply(pd.to_numeric, errors='coerce')
+    # read the file which starts with "TOP" . slip the first line
 
-'''
-Diskwerite and Diskread also has Diskwritesrvc and diskreadsrvc parsed from the nmon file
-So after parsing we need to filter out only Diskwrite
-diskwritedf also has a problem all columns are parsed as object. 
-We need to exclude columns not stating with "hd*" before chnverting entire dataframe as float / numeris
-
-'''
-
-diskreaddf = abhi_parser_module("diskread.csv","DISKREAD")
-diskreaddf = diskreaddf[diskreaddf['DISKREAD'] == 'DISKREAD'] # DISKREAD annd DISKREADSRVC is parsed from some nmon .filter
-diskreaddf = diskreaddf.loc[:,diskreaddf.columns.str.startswith('hdisk')]
-diskreaddf = diskreaddf.apply(pd.to_numeric, errors='coerce')
+    topfile = open(f'{csv_temp_dir}/top.csv', 'w')
+    for thisline in Lines:
+        if thisline.startswith("TOP"):
+            #print(thisline.strip())
+            topfile.writelines(thisline)
+    topfile.close()
+    topdf = pd.read_csv(f"{csv_temp_dir}/top.csv",skiprows=1,sep = custom_delimiter)
+    #old_colname= str(topdf.columns[1])
+    topdf.rename(columns = {"Time":'TXXX'}, inplace = True)
+    topdf.rename(columns = {"+PID":'PID'}, inplace = True)
+    topdf = pd.merge(topdf, zzzzdf, on="TXXX")
+    #topdf.set_index("TDATATIME",inplace=True)
+    topdf.index = topdf["TDATATIME"]
+    topdf.rename(columns = {"TDATATIME":'TDATATIME1'}, inplace = True)
+    print(topdf.info())
+    topdf.to_csv(f"{csv_temp_dir}/topfinal.csv")
+    topdf.head()
 
 
-jfsfiledf = abhi_parser_module("jfsfile.csv","JFSFILE")
+    print("##" * 100)
 
-diskxferdf.head()
+    lpardf = abhi_parser_module("lpar.csv","LPAR")
+    cpualldf = abhi_parser_module("cpuall.csv","CPU_ALL")
+    memnewdf = abhi_parser_module("memnew.csv","MEMNEW")
+    pagedf = abhi_parser_module("page.csv","PAGE")
 
-abhi_cpuall_and_lpar_grapher()
-abhi_top_cpu_command_grapher()
-abhi_top_cpu_process_grapher()
-abhi_memory_grapher()
-abhi_top_memory_command_grapher()
-abhi_page_grapher()
-abhi_disk_grapher()
-#abhi_jfsfilesystem_grapher()
 
-for figures in list_figures:
-    figures.savefig(pp, format='pdf')  
 
-pp.close()
+    diskxferdf = abhi_parser_module("diskxfer.csv","DISKXFER")
+    diskbusydf = abhi_parser_module("diskbusy.csv","DISKBUSY")
 
-print("completed. Check pdf file in the current directory")
+
+    '''
+    Diskwerite and Diskread also has Diskwritesrvc and diskreadsrvc parsed from the nmon file
+    So after parsing we need to filter out only Diskwrite
+    diskwritedf also has a problem all columns are parsed as object. 
+    We need to exclude columns not stating with "hd*" before chnverting entire dataframe as float / numeris
+
+    '''
+    diskwritedf = abhi_parser_module("diskwrite.csv","DISKWRITE")
+    diskwritedf = diskwritedf[diskwritedf['DISKWRITE'] == 'DISKWRITE']
+    diskwritedf = diskwritedf.loc[:,diskwritedf.columns.str.startswith('hdisk')]
+    diskwritedf = diskwritedf.apply(pd.to_numeric, errors='coerce')
+
+    '''
+    Diskwerite and Diskread also has Diskwritesrvc and diskreadsrvc parsed from the nmon file
+    So after parsing we need to filter out only Diskwrite
+    diskwritedf also has a problem all columns are parsed as object. 
+    We need to exclude columns not stating with "hd*" before chnverting entire dataframe as float / numeris
+
+    '''
+
+    diskreaddf = abhi_parser_module("diskread.csv","DISKREAD")
+    diskreaddf = diskreaddf[diskreaddf['DISKREAD'] == 'DISKREAD'] # DISKREAD annd DISKREADSRVC is parsed from some nmon .filter
+    diskreaddf = diskreaddf.loc[:,diskreaddf.columns.str.startswith('hdisk')]
+    diskreaddf = diskreaddf.apply(pd.to_numeric, errors='coerce')
+
+
+    jfsfiledf = abhi_parser_module("jfsfile.csv","JFSFILE")
+
+    diskxferdf.head()
+
+    abhi_cpuall_and_lpar_grapher()
+    abhi_top_cpu_command_grapher()
+    abhi_top_cpu_process_grapher()
+    abhi_memory_grapher()
+    abhi_top_memory_command_grapher()
+    abhi_page_grapher()
+    abhi_disk_grapher()
+    #abhi_jfsfilesystem_grapher()
+
+    for figures in list_figures:
+        figures.savefig(pp, format='pdf')  
+
+    pp.close()
+
+    print(50 * "$" ,f"\n\nCompleted. \nCheck pdf file named {pdf_filename} in the directory")
     
