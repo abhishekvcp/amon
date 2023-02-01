@@ -1,6 +1,12 @@
 # amon
 <h2>
 <p>This python script produces a pdf file reading through a .nmon file for AIX servers>/p>
+
+![image](https://user-images.githubusercontent.com/46884901/216033364-0716d801-d039-4de4-9bb3-7e13cd7080e6.png)
+![image](https://user-images.githubusercontent.com/46884901/216033486-268951eb-0456-493a-ba09-4ae176673b3a.png)
+![image](https://user-images.githubusercontent.com/46884901/216033570-45b24520-f91b-4e89-8022-47e0d0e562e3.png)
+![image](https://user-images.githubusercontent.com/46884901/216033642-26b9a678-ba48-4a0e-840c-7a47670a3ecf.png)
+
 </h2>
 <h4>
 <ol>Produces a pdf output file file</ol>
