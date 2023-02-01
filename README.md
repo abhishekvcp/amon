@@ -25,7 +25,15 @@
 </h5>
 
 python parser for aIX .nmon file visualization. <br>Run the script amon_aix.py <br>Supply input filewait for 2 mins
+
+method1 : Run manually 
+
 ![how_to_run](https://user-images.githubusercontent.com/46884901/214522544-69a0c4b3-b588-40e4-9ab2-1cebd2e61f84.JPG)
+
+Method 2 : Run via automation : passing nmon file as a parameter 
+
+![image](https://user-images.githubusercontent.com/46884901/216031309-c5f5ccac-71d0-428f-bfb2-1039e4894ded.png)
+
 
 Contact : abhishek.vcp@gmail.com
 mob : 9740722880
