@@ -1,4 +1,3 @@
-#%matplotlib inline
 import pandas as pd
 import re
 import datetime
@@ -122,6 +121,7 @@ def abhi_top_cpu_process_grapher():
     global confdf
     global topdf
     
+    print("in process grapher : ")
     
     virtualprocessors_x100 = int(confdf.loc["conf","cpu_virtual"] * 100)
     title_servername = confdf.loc["conf","servername"]
@@ -147,7 +147,7 @@ def abhi_top_cpu_process_grapher():
     ax2.set_title(title_servername + " : Number of process by commands")
     ax2.set_xticklabels(ax2.get_xticklabels(),rotation=85)
     ax2.set_xlabel("datetime->")
-    ax2.legend()
+    #ax2.legend() # there os no legend to put
 
     figb.tight_layout()
     figb.text(0.95, 0.05,   legends [::-1] + marker[::-1] + facecolors[::-1],
@@ -165,6 +165,9 @@ def abhi_cpuall_and_lpar_grapher():
     global confdf
     global cpualldf
     global lpardf
+
+    print("in CPUALL and LPAR grapger : ")
+    
     print(cpualldf.head(3))
     print(lpardf.head(3))
     
@@ -211,6 +214,8 @@ def abhi_memory_grapher():
     global pdf_filename
     global confdf
     global memnewdf
+
+    print("in Memory  grapher : ")
     
     virtualprocessors_x100 = int(confdf.loc["conf","cpu_virtual"] * 100)
     title_servername = confdf.loc["conf","servername"]
@@ -252,6 +257,8 @@ def abhi_top_memory_command_grapher():
     global pdf_filename
     global confdf
     global topdf
+
+    print("in Memory command grapher : ")
     
     topdf["ResTotalMB"] = (topdf["ResData"] + topdf["ResText"]) / 1024
     topdf.sort_values(by="ResTotalMB",ascending=False)
@@ -294,6 +301,8 @@ def abhi_top_memory_command_grapher():
 #######################################################################################################################
 
 def abhi_page_grapher():
+
+    print("in paging grapher : ")
     global list_figures
     global pdf_filename
     global confdf
@@ -338,7 +347,8 @@ def abhi_disk_grapher():
     global diskreaddf
     global diskbusydf
     global list_figures
-    
+
+    print("in disk grapher module : ")
     
     title_servername = confdf.loc["conf","servername"]
     
@@ -420,6 +430,7 @@ def abhi_parser_module(csv_filename,starting_text):
     df.rename(columns = {"TDATATIME":'TDATATIME1'}, inplace = True)
     #lpardf.set_index("TDATATIME",inplace=True)
     print(df.info())
+    print(f"parsed {csv_filename} : ")
     #df.head()
     return df
 
@@ -465,7 +476,7 @@ if __name__ == "__main__":
     dd , mon , yyyy = nmon_date.split("-") # year come in the end, move yyyy to the beginning and day to end : parrt1
     nmon_date = (f"{yyyy}-{mon}-{dd}") # year come in the end, move yyyy to the beginning and day to end : part2
     print(nmon_date)
-    #a = input("press any key")
+    #print("print")
     bbbldf.set_index("metric",inplace=True)
     print(bbbldf.info())
     #print(bbbldf)
@@ -547,7 +558,6 @@ if __name__ == "__main__":
     So after parsing we need to filter out only Diskwrite
     diskwritedf also has a problem all columns are parsed as object. 
     We need to exclude columns not stating with "hd*" before chnverting entire dataframe as float / numeris
-
     '''
     diskwritedf = abhi_parser_module("diskwrite.csv","DISKWRITE")
     diskwritedf = diskwritedf[diskwritedf['DISKWRITE'] == 'DISKWRITE']
@@ -559,7 +569,6 @@ if __name__ == "__main__":
     So after parsing we need to filter out only Diskwrite
     diskwritedf also has a problem all columns are parsed as object. 
     We need to exclude columns not stating with "hd*" before chnverting entire dataframe as float / numeris
-
     '''
 
     diskreaddf = abhi_parser_module("diskread.csv","DISKREAD")
@@ -587,4 +596,5 @@ if __name__ == "__main__":
     pp.close()
 
     print(50 * "$" ,f"\n\nCompleted. \nCheck pdf file named {pdf_filename} in the directory")
-    
+
+
